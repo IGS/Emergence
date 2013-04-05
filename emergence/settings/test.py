@@ -1,2 +1,2 @@
 # settings/test.py
--r common.py
+from .common import *

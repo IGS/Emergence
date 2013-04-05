@@ -1,2 +1,2 @@
 # settings/dev.py
--r common.py
+from .common import *

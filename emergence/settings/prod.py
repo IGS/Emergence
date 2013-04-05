@@ -1,2 +1,2 @@
 # settings/prod.py
--r common.py
+from .common import *
