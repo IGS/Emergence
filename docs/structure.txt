@@ -1,0 +1,98 @@
+
+
+
+=- Primary data storage -=
+
+- UNIX got this pretty correct already - we just need to provide both interface and API access to a smaller subset of this and store metadata in a central db.
+- Local data access should be limited to the user running the server daemon.  All interactions are through the interface or API.
+
+
+- Data will not be stored under any given project/user so that it isn't limited to that project/user.
+- Data will always stored in a library, even if the user hasn't specified one.  It becomes their 'current' until it is renamed or given other metadata.
+
+./data/$library_id/
+
+=- User-evident data hierarchy -=
+
+No heirarchy should be required at all, and users should be able to jump right in and start uploading source and compute data without creating projects, libraries, etc.
+
+
+=- Code structure -=
+
+Suggested from:
+http://guide.python-distribute.org/creation.html#basics-creating-and-distributing-distributions
+
+TowelStuff/
+    bin/
+    CHANGES.txt
+    docs/
+    LICENSE.txt
+    MANIFEST.in
+    README.txt
+    setup.py
+    towelstuff/
+        __init__.py
+        location.py
+        utils.py
+        test/
+            __init__.py
+            test_location.py
+            test_utils.py
+            
+This one doesn't have anything to do with Django though.
+
+For the Django part, this seems reasonable:
+
+http://www.deploydjango.com/django_project_structure/index.html
+0. Installed Django 1.5.1 from tarball
+1. python3.2 /usr/local/lib/python3.2/dist-packages/django/bin/django-admin.py startproject emergence
+2. then modify
+
+.
+├── djangolicious
+│   ├── apps
+│   │   ├── blog
+│   │   │   ├── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── tests.py
+│   │   │   └── views.py
+│   │   ├── __init__.py
+│   │   ├── news
+│   │   │   ├── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── tests.py
+│   │   │   └── views.py
+│   │   └── reader
+│   │       ├── __init__.py
+│   │       ├── models.py
+│   │       ├── tests.py
+│   │       └── views.py
+│   ├── __init__.py
+│   ├── libs
+│   │   ├── display
+│   │   │   ├── __init__.py
+│   │   │   ├── models.py
+│   │   │   ├── tests.py
+│   │   │   └── views.py
+│   │   ├── __init__.py
+│   │   └── management
+│   │       ├── __init__.py
+│   │       ├── models.py
+│   │       ├── tests.py
+│   │       └── views.py
+│   ├── settings
+│   │   ├── common.py
+│   │   ├── dev.py
+│   │   ├── __init__.py
+│   │   ├── prod.py
+│   │   └── test.py
+│   ├── urls.py
+│   └── wsgi.py
+├── manage.py
+├── requirements
+│   ├── common.txt
+│   ├── dev.txt
+│   ├── prod.txt
+│   └── test.txt
+└── requirements.txt
+

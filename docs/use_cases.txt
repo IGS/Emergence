@@ -1,0 +1,28 @@
+Eukaryotic sequence -
+    Possible inputs:
+        - unassembled genomic reads
+        - assembled genomic contigs
+        - RNA-Seq reads
+        - RNA-Seq transcript assemblies
+        - EST/cDNA collections
+    Possible outputs:
+        - 
+
+Prokaryotic sequence -
+    Possible inputs:
+        - unassembled reads
+        - assembled contigs
+    Possible outputs:
+        - 
+
+
+Metagenomic sequence - 
+    Possible inputs:
+        - unassembled reads
+        - assembled contigs
+    Possible outputs:
+        - fragment recruitment plots
+        - taxonomic profiles
+        - ...
+        - good FSM too much to list now
+
