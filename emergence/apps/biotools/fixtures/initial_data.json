@@ -1,41 +1,61 @@
 [
-  {
-    "model": "biotools.filetype",
-    "pk": 1,
+{
+    "pk": 1, 
+    "model": "biotools.filetype", 
     "fields": {
-       "name": "GFF3",
-       "format": "GFF3",
-       "variant": "canonical",
-       "spec_url": "http://www.sequenceontology.org/gff3.shtml"
+        "spec_url": "http://www.sequenceontology.org/gff3.shtml", 
+        "variant": "canonical", 
+        "name": "GFF3", 
+        "format": "GFF3"
     }
-  },
-  {
-    "model": "biotools.filetype",
-    "pk": 2,
+},
+{
+    "pk": 2, 
+    "model": "biotools.filetype", 
     "fields": {
-       "name": "FASTA (protein)",
-       "format": "FASTA",
-       "variant": "protein",
-       "spec_url": "http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml"
+        "spec_url": "http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml", 
+        "variant": "protein", 
+        "name": "FASTA (protein)", 
+        "format": "FASTA"
     }
-  },
-  {
-    "model": "biotools.filetype",
-    "pk": 3,
+},
+{
+    "pk": 3, 
+    "model": "biotools.filetype", 
     "fields": {
-       "name": "FASTA (nucleotide)",
-       "format": "FASTA",
-       "variant": "nucleotide",
-       "spec_url": "http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml"
+        "spec_url": "http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml", 
+        "variant": "nucleotide", 
+        "name": "FASTA (nucleotide)", 
+        "format": "FASTA"
     }
-  },
-  {
-    "model": "biotools.standalonetool",
-    "pk": 1,
+},
+{
+    "pk": 1, 
+    "model": "biotools.tool", 
     "fields": {
-       "name": "Augustus",
-       "version": "2.7",
-       "files": []
+        "exec_path": "/opt/augustus-2.7", 
+        "version": "2.7", 
+        "name": "Augustus"
     }
-  },
+},
+{
+    "pk": 1, 
+    "model": "biotools.toolfiletype", 
+    "fields": {
+        "tool": 1, 
+        "required": true, 
+        "io_type": "i", 
+        "filetype": 1
+    }
+},
+{
+    "pk": 3, 
+    "model": "biotools.toolfiletype", 
+    "fields": {
+        "tool": 1, 
+        "required": false, 
+        "io_type": "i", 
+        "filetype": 2
+    }
+}
 ]
