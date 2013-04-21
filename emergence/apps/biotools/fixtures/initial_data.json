@@ -1,0 +1,41 @@
+[
+  {
+    "model": "biotools.filetype",
+    "pk": 1,
+    "fields": {
+       "name": "GFF3",
+       "format": "GFF3",
+       "variant": "canonical",
+       "spec_url": "http://www.sequenceontology.org/gff3.shtml"
+    }
+  },
+  {
+    "model": "biotools.filetype",
+    "pk": 2,
+    "fields": {
+       "name": "FASTA (protein)",
+       "format": "FASTA",
+       "variant": "protein",
+       "spec_url": "http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml"
+    }
+  },
+  {
+    "model": "biotools.filetype",
+    "pk": 3,
+    "fields": {
+       "name": "FASTA (nucleotide)",
+       "format": "FASTA",
+       "variant": "nucleotide",
+       "spec_url": "http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml"
+    }
+  },
+  {
+    "model": "biotools.standalonetool",
+    "pk": 1,
+    "fields": {
+       "name": "Augustus",
+       "version": "2.7",
+       "files": []
+    }
+  },
+]

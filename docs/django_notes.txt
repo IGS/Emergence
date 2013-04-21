@@ -1,3 +1,6 @@
+Make sure the database is in sync
+   $ python3.2 manage.py syncdb
+
 To start the development server (other options described below)
    $ python3.2 manage.py runserver
 
@@ -7,3 +10,6 @@ http://127.0.0.1:8000/
 There are separate parameters for production (prod), testing (test) and development (dev).  Development is the default, but you can specify which you want like this:
 
    $ python3.2 manage.py runserver --settings=emergence.settings.prod
+
+Notes on incorporating JQuery with Django:
+http://stackoverflow.com/questions/12031825/how-to-set-up-django-website-with-jquery
