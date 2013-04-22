@@ -42,7 +42,13 @@ class Tool(models.Model):
 
     ## should be loaded from a discovery/conf file
     exec_path = models.FilePathField( allow_folders=False )
+    
+    ## Usually the primary site of the tool by the author
+    primary_site = models.CharField( max_length=200 )
 
+    ## Publication (may or may not be peer-reviewed)
+    publication = models.CharField( max_length=300 )
+    
     ## note: https://docs.djangoproject.com/en/dev/topics/db/models/#extra-fields-on-many-to-many-relationships
     files = models.ManyToManyField( Filetype, through='ToolFiletype' )
     
@@ -50,11 +56,11 @@ class Tool(models.Model):
 class StandaloneTool( Tool ):
     pass
 
-#class ErgatisTool( Tool ):
-    #pass
+class ErgatisTool( Tool ):
+    pass
 
-#class GalaxyTool( Tool ):
-    #pass
+class GalaxyTool( Tool ):
+    pass
 
 
 class ToolFiletype(models.Model):
@@ -63,7 +69,7 @@ class ToolFiletype(models.Model):
     """
     tool = models.ForeignKey(Tool)
     filetype = models.ForeignKey(Filetype)
-
+    description = models.CharField( max_length=200 )
     required = models.BooleanField()
 
     IO_TYPES = (

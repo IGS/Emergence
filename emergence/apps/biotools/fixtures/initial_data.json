@@ -30,12 +30,74 @@
     }
 },
 {
+    "pk": 4, 
+    "model": "biotools.filetype", 
+    "fields": {
+        "spec_url": "http://www.ncbi.nlm.nih.gov/Sitemap/samplerecord.html", 
+        "variant": "canonical", 
+        "name": "GenBank Flat File Format", 
+        "format": "GBK"
+    }
+},
+{
+    "pk": 5, 
+    "model": "biotools.filetype", 
+    "fields": {
+        "spec_url": "http://www.cbcb.umd.edu/software/glimmer/glim302notes.pdf", 
+        "variant": "canonical", 
+        "name": "Glimmer3 predict", 
+        "format": "predict"
+    }
+},
+{
+    "pk": 5, 
+    "model": "biotools.filetype", 
+    "fields": {
+        "spec_url": "http://nar.oxfordjournals.org/content/38/6/1767", 
+        "variant": "Sanger", 
+        "name": "FASTQ", 
+        "format": "FASTQ"
+    }
+},
+{
     "pk": 1, 
     "model": "biotools.tool", 
     "fields": {
-        "exec_path": "/opt/augustus-2.7", 
+        "exec_path": "/opt/augustus-2.7/bin/augustus", 
         "version": "2.7", 
-        "name": "Augustus"
+        "name": "Augustus",
+        "primary_site": "http://bioinf.uni-greifswald.de/augustus/b"
+    }
+},
+{
+    "pk": 2, 
+    "model": "biotools.tool", 
+    "fields": {
+        "exec_path": "/opt/prodigal-2.60/bin/prodigal", 
+        "version": "2.60", 
+        "name": "Prodigal",
+        "primary_site": "https://code.google.com/p/prodigal/"
+    }
+},
+{
+    "pk": 3, 
+    "model": "biotools.tool", 
+    "fields": {
+        "exec_path": "/opt/glimmer-3.02/bin/glimmer3", 
+        "version": "3.02", 
+        "name": "Glimmer3",
+        "primary_site": "http://www.cbcb.umd.edu/software/glimmer/"
+    }
+},
+{
+    "pk": 4, 
+    "model": "biotools.tool", 
+    "fields": {
+        "exec_path": "/opt/khmer/scripts/normalize-by-median.py",
+        "version": "", 
+        "name": "Digital normalization (single-pass)",
+        "primary_site": "https://github.com/ctb/khmer",
+        "publication": "http://arxiv.org/abs/1203.4802"
     }
 },
 {
@@ -56,6 +118,66 @@
         "required": false, 
         "io_type": "i", 
         "filetype": 2
+    }
+},
+{
+    "pk": 4, 
+    "model": "biotools.toolfiletype", 
+    "fields": {
+        "tool": 2, 
+        "required": true, 
+        "io_type": "i", 
+        "filetype": 3
+    }
+},
+{
+    "pk": 5, 
+    "model": "biotools.toolfiletype", 
+    "fields": {
+        "tool": 2, 
+        "required": false, 
+        "io_type": "o", 
+        "filetype": 4
+    }
+},
+{
+    "pk": 6, 
+    "model": "biotools.toolfiletype", 
+    "fields": {
+        "tool": 2, 
+        "required": false, 
+        "io_type": "o", 
+        "filetype": 1
+    }
+},
+{
+    "pk": 7, 
+    "model": "biotools.toolfiletype", 
+    "fields": {
+        "tool": 3, 
+        "required": true, 
+        "io_type": "i", 
+        "filetype": 3
+    }
+},
+{
+    "pk": 8, 
+    "model": "biotools.toolfiletype", 
+    "fields": {
+        "tool": 4, 
+        "required": true, 
+        "io_type": "i", 
+        "filetype": 5
+    }
+},
+{
+    "pk": 9, 
+    "model": "biotools.toolfiletype", 
+    "fields": {
+        "tool": 4, 
+        "required": true, 
+        "io_type": "o", 
+        "filetype": 5
     }
 }
 ]
