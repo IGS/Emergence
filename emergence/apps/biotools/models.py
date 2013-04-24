@@ -4,7 +4,7 @@ from django.db import models
 This module is used to describe bioinformatics tools, their formats, and interdependencies.
 """
 
-class Filetype(models.Model):
+class Filetype( models.Model ):
     """
     Base class for the different bioinformatics file types, such as GFF3, GBK, BAM, etc.
 
@@ -24,7 +24,7 @@ class Filetype(models.Model):
     spec_url  = models.URLField()
 
 
-class Tool(models.Model):
+class Tool( models.Model ):
     """
     A 'tool' is an extremely generic term within this framework.  It can represent a single
     executable such as blastn or a more complete analysis pipeline implemented in workflow
@@ -63,7 +63,7 @@ class GalaxyTool( Tool ):
     pass
 
 
-class ToolFiletype(models.Model):
+class ToolFiletype( models.Model ):
     """
     Model which links Tools and their associated file types, both input and output.
     """
@@ -78,8 +78,6 @@ class ToolFiletype(models.Model):
     )
     io_type = models.CharField( max_length=1, choices=IO_TYPES )
     
-
-
 
 
     

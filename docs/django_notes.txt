@@ -13,3 +13,7 @@ There are separate parameters for production (prod), testing (test) and developm
 
 Notes on incorporating JQuery with Django:
 http://stackoverflow.com/questions/12031825/how-to-set-up-django-website-with-jquery
+
+Documentation:
+ReST + Sphinx + RTD:
+https://read-the-docs.readthedocs.org/en/latest/getting_started.html

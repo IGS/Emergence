@@ -8,13 +8,15 @@
 
 
 - Data will not be stored under any given project/user so that it isn't limited to that project/user.
-- Data will always stored in a library, even if the user hasn't specified one.  It becomes their 'current' until it is renamed or given other metadata.
+- Data will always be linked to a collection, even if the user hasn't specified one.  It becomes their 'current' until it is renamed or given other metadata.  (The directory isn't renamed here, just metadata modified.)
 
-./data/$library_id/
+./data/$year/$month/$day/
+
+If the data is a local resource a symlink will be stored rather than the actual file copied.  This will mean explicit symlink checks will be necessary.
 
 =- User-evident data hierarchy -=
 
-No heirarchy should be required at all, and users should be able to jump right in and start uploading source and compute data without creating projects, libraries, etc.
+No heirarchy should be required at all, and users should be able to jump right in and start uploading source and compute data without creating projects, data collections, etc.
 
 
 =- Code structure -=
