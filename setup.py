@@ -12,5 +12,5 @@ setup(
     description='A biological sequence annotation and analysis system.',
     long_description=open('README.txt').read(),
     install_requires=[
-        "Django >= 1.5.1",
+        "Django >= 1.6",
 )
