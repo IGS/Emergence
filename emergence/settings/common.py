@@ -123,8 +123,15 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'emergence.apps.biotools',
-    'emergence.apps.fileserver'
+    'emergence.apps.fileserver',
+    'emergence.apps.flow',
+    'djcelery'
 )
+
+## instructions for Celery from here:
+#   https://pypi.python.org/pypi/django-celery/
+import djcelery
+djcelery.setup_loader()
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

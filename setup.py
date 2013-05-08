@@ -13,4 +13,5 @@ setup(
     long_description=open('README.txt').read(),
     install_requires=[
         "Django >= 1.6",
+        "django-celery >= 3.0.17",
 )

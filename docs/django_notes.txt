@@ -17,3 +17,37 @@ http://stackoverflow.com/questions/12031825/how-to-set-up-django-website-with-jq
 Documentation:
 ReST + Sphinx + RTD:
 https://read-the-docs.readthedocs.org/en/latest/getting_started.html
+
+
+Workflow component (explorations in not reinventing the wheel)
+--------------------------------------------------------------
+
+Both of these are more for abstract process definitions, and don't seem to have anything
+what would resemble command/commandset structure.
+
+django-workflows
+GoFlow
+
+Celery: Distributed Task Queue
+  This seems to be the way to actually do the execution and monitoring.  It automatically
+  handles queuing, and distributed listener daemons on multiple servers.
+
+  It requires a configurable message queuing system, such as RabbitMQ or Redis
+
+  Discussion:
+
+  http://ericholscher.com/blog/2010/jun/23/large-problems-django-mostly-solved-delayed-execut/
+  http://www.davidfischer.name/2010/09/django-and-asynchronous-jobs/
+
+  When I installed all this I got this the first time I ran syncdb:
+
+  https://github.com/celery/celery/issues/1345
+  
+  I installed anyjson on my own, then ran into this error when doing syncdb:
+  
+  File "/opt/python-3.3.1/lib/python3.3/site-packages/django_celery-3.0.17-py3.3.egg/djcelery/picklefield.py", line 23, in <module>
+    from django.utils.encoding import force_unicode
+    ImportError: cannot import name force_unicode
+
+  I had to manually fix this file, removing the import and single call to force_unicode, which isn'
+  necessary in Django 1.6

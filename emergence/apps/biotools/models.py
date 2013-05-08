@@ -33,25 +33,25 @@ class Tool( models.Model ):
     Most simply, a tool should be thought of us a unit of analysis that can require some number
     of inputs and generates at least one output.
     """
-    
+
     ## Do not include version numbers in the name
     name = models.CharField( max_length=100 )
-    
+
     ## Pretty open here - could be like '1.12.0' or 'beta5'
     version = models.CharField( max_length=50 )
 
     ## should be loaded from a discovery/conf file
     exec_path = models.FilePathField( allow_folders=False )
-    
+
     ## Usually the primary site of the tool by the author
     primary_site = models.CharField( max_length=200 )
 
     ## Publication (may or may not be peer-reviewed)
     publication = models.CharField( max_length=300 )
-    
+
     ## note: https://docs.djangoproject.com/en/dev/topics/db/models/#extra-fields-on-many-to-many-relationships
     files = models.ManyToManyField( Filetype, through='ToolFiletype' )
-    
+
 
 class StandaloneTool( Tool ):
     pass
@@ -61,6 +61,7 @@ class ErgatisTool( Tool ):
 
 class GalaxyTool( Tool ):
     pass
+
 
 
 class ToolFiletype( models.Model ):
@@ -77,7 +78,7 @@ class ToolFiletype( models.Model ):
         ('i', 'Input'),
     )
     io_type = models.CharField( max_length=1, choices=IO_TYPES )
-    
 
 
-    
+
+
