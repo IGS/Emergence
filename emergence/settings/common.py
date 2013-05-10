@@ -84,7 +84,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '2z%o4!-4sl397jjzffdl!znglrg^%)b@%nnpeq9+j0$5190bf('
+SECRET_KEY = 'P(S&*H%(&N#:LJHs;dljhfpo7v3&#WH&n;sjdnfv72w937y4rh'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -123,15 +123,17 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'emergence.apps.biotools',
+    'emergence.apps.coreui',
     'emergence.apps.fileserver',
     'emergence.apps.flow',
-    'djcelery'
+    #'djcelery'
 )
 
 ## instructions for Celery from here:
 #   https://pypi.python.org/pypi/django-celery/
-import djcelery
-djcelery.setup_loader()
+# Won't support 3.3 until django-celergy 3.0.19
+#import djcelery
+#djcelery.setup_loader()
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

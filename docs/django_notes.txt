@@ -18,6 +18,9 @@ Documentation:
 ReST + Sphinx + RTD:
 https://read-the-docs.readthedocs.org/en/latest/getting_started.html
 
+Interface:
+Possible framework: http://foundation.zurb.com/
+ (also great fonts and color scheme)
 
 Workflow component (explorations in not reinventing the wheel)
 --------------------------------------------------------------
