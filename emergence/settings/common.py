@@ -132,6 +132,8 @@ INSTALLED_APPS = (
 ## instructions for Celery from here:
 #   https://pypi.python.org/pypi/django-celery/
 # Won't support 3.3 until django-celergy 3.0.19
+## how about this?  https://pypi.python.org/packages/source/c/celery/celery-3.0.19.tar.gz
+## it's the framework integration (django-celery) that is currently lagging
 #import djcelery
 #djcelery.setup_loader()
 
