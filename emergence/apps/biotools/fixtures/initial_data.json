@@ -66,7 +66,7 @@
         "exec_path": "/opt/augustus-2.7/bin/augustus", 
         "version": "2.7", 
         "name": "Augustus",
-        "primary_site": "http://bioinf.uni-greifswald.de/augustus/b"
+        "primary_site": "http://bioinf.uni-greifswald.de/augustus"
     }
 },
 {
