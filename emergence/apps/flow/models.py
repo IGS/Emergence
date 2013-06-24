@@ -79,7 +79,7 @@ class Flow(Step):
 
         objs = []
         for obj in self.children.all().select_related(*child_attrs.keys()):
-            # Try to find any children... failing that, use the obj itself
+            # Try to find any children...
             for child in child_attrs.values():
                 sobj = obj.__dict__.get(child)
                 if sobj is not None:
