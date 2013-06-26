@@ -70,16 +70,6 @@
     }
 },
 {
-    "pk": 2, 
-    "model": "biotools.tool", 
-    "fields": {
-        "exec_path": "/opt/prodigal-2.60/bin/prodigal", 
-        "version": "2.60", 
-        "name": "Prodigal",
-        "primary_site": "https://code.google.com/p/prodigal/"
-    }
-},
-{
     "pk": 3, 
     "model": "biotools.tool", 
     "fields": {
@@ -118,36 +108,6 @@
         "required": false, 
         "io_type": "i", 
         "filetype": 2
-    }
-},
-{
-    "pk": 4, 
-    "model": "biotools.toolfiletype", 
-    "fields": {
-        "tool": 2, 
-        "required": true, 
-        "io_type": "i", 
-        "filetype": 3
-    }
-},
-{
-    "pk": 5, 
-    "model": "biotools.toolfiletype", 
-    "fields": {
-        "tool": 2, 
-        "required": false, 
-        "io_type": "o", 
-        "filetype": 4
-    }
-},
-{
-    "pk": 6, 
-    "model": "biotools.toolfiletype", 
-    "fields": {
-        "tool": 2, 
-        "required": false, 
-        "io_type": "o", 
-        "filetype": 1
     }
 },
 {

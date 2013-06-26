@@ -52,10 +52,48 @@ class Tool( models.Model ):
     ## note: https://docs.djangoproject.com/en/dev/topics/db/models/#extra-fields-on-many-to-many-relationships
     files = models.ManyToManyField( Filetype, through='ToolFiletype' )
 
-
+    
+      
 class StandaloneTool( Tool ):
-    pass
+    ## This should only be toggled to True if all the dependencies for the tool
+    #  are satisfied for any given installation.
+    enabled = models.BooleanField( default=False )
+    
+    #class Meta:
+        #unique_together = (('name', 'version'),)
+    
 
+class StandaloneToolParam( models.Model ):
+    tool = models.ForeignKey(StandaloneTool)
+    
+    ## There is a wide variety of ways to send parameters to a command.  Essentially,
+    #  you want to enter whatever here goes before the actual value of the parameter,
+    #  if anything at all.  Note the use of trailing spaces when needed.  Examples include:
+    #   tool -i foo.fna                 prefix = "-i "
+    #   tool -ifoo.fna                  prefix = "-i"
+    #   tool --input foo.fna            prefix = "--input "
+    #   tool --input=foo.fna            prefix = "--input="
+    #   tool foo.fna                    prefix = None or ''
+    prefix =  models.CharField( max_length=200 )
+    
+    ## Some tools require their parameters to be in a specific order
+    ## These don't to be unique but are only guaranteed to be sorted by this field.
+    position = models.PositiveSmallIntegerField( blank=True )
+    
+    ## For those areas where a short description is needed (<= 100 characters)
+    short_desc = models.CharField( max_length=100 )
+    
+    ## Here you should put a verbose description of your option
+    long_desc = models.TextField()
+    
+    ## Is this parameter optional?
+    is_optional = models.BooleanField( default=True )
+    
+    ## Should the value of the option be wrapped in quotes?
+    #   By default double quotes will be used unless they are detected
+    #   within the value string.
+    has_quoted_value = models.BooleanField( default=False )
+  
 class ErgatisTool( Tool ):
     pass
 
