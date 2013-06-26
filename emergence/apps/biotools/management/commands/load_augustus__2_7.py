@@ -19,11 +19,11 @@ class Command(BaseCommand):
                                primary_site='http://bioinf.uni-greifswald.de/augustus' )
         tool.save()
 
-        add_toolfiletype( tool, 'i', 'FASTA (nucleotide)', True )
-        add_toolfiletype( tool, 'o', 'GFF3', True )
+        self.add_toolfiletype( tool, 'i', 'FASTA (nucleotide)', True )
+        self.add_toolfiletype( tool, 'o', 'GFF3', True )
 
 
 
-    def add_toolfiletype(tool, iotype, ft_name, req):
+    def add_toolfiletype(self, tool, iotype, ft_name, req):
         ft = Filetype.objects.get( name=ft_name )
         ToolFiletype( tool=tool, required=req, io_type=iotype, filetype=ft ).save()

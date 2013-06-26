@@ -60,16 +60,6 @@
     }
 },
 {
-    "pk": 1, 
-    "model": "biotools.tool", 
-    "fields": {
-        "exec_path": "/opt/augustus-2.7/bin/augustus", 
-        "version": "2.7", 
-        "name": "Augustus",
-        "primary_site": "http://bioinf.uni-greifswald.de/augustus"
-    }
-},
-{
     "pk": 3, 
     "model": "biotools.tool", 
     "fields": {
@@ -88,26 +78,6 @@
         "name": "Digital normalization (single-pass)",
         "primary_site": "https://github.com/ctb/khmer",
         "publication": "http://arxiv.org/abs/1203.4802"
-    }
-},
-{
-    "pk": 1, 
-    "model": "biotools.toolfiletype", 
-    "fields": {
-        "tool": 1, 
-        "required": true, 
-        "io_type": "i", 
-        "filetype": 1
-    }
-},
-{
-    "pk": 3, 
-    "model": "biotools.toolfiletype", 
-    "fields": {
-        "tool": 1, 
-        "required": false, 
-        "io_type": "i", 
-        "filetype": 2
     }
 },
 {

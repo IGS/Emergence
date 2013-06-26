@@ -19,12 +19,12 @@ class Command(BaseCommand):
                                primary_site='https://code.google.com/p/prodigal/' )
         tool.save()
 
-        add_toolfiletype( tool, 'i', 'FASTA (nucleotide)', True )
-        add_toolfiletype( tool, 'o', 'GenBank Flat File Format', False )
-        add_toolfiletype( tool, 'o', 'GFF3', False )
+        self.add_toolfiletype( tool, 'i', 'FASTA (nucleotide)', True )
+        self.add_toolfiletype( tool, 'o', 'GenBank Flat File Format', False )
+        self.add_toolfiletype( tool, 'o', 'GFF3', False )
 
 
 
-    def add_toolfiletype(tool, iotype, ft_name, req):
+    def add_toolfiletype(self, tool, iotype, ft_name, req):
         ft = Filetype.objects.get( name=ft_name )
         ToolFiletype( tool=tool, required=req, io_type=iotype, filetype=ft ).save()
