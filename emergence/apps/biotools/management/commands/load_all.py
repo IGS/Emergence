@@ -25,6 +25,5 @@ class Command(BaseCommand):
 
                 command = load_command_class(app_name, command_name)
 
-                #self.stdout.write("INFO: {0} - {1}\n".format(command_name, command.help))
-                print("INFO: {0} - {1}".format(command_name, command.help))
+                self.stdout.write("INFO: {0} - {1}\n".format(command_name, command.help))
                 command.handle()
