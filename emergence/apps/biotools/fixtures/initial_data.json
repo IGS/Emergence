@@ -63,7 +63,6 @@
     "pk": 3, 
     "model": "biotools.tool", 
     "fields": {
-        "exec_path": "/opt/glimmer-3.02/bin/glimmer3", 
         "version": "3.02", 
         "name": "Glimmer3",
         "primary_site": "http://www.cbcb.umd.edu/software/glimmer/"
@@ -73,7 +72,6 @@
     "pk": 4, 
     "model": "biotools.tool", 
     "fields": {
-        "exec_path": "/opt/khmer/scripts/normalize-by-median.py",
         "version": "", 
         "name": "Digital normalization (single-pass)",
         "primary_site": "https://github.com/ctb/khmer",

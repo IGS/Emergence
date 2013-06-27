@@ -15,7 +15,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         tool = StandaloneTool( name='Augustus', \
                                version='2.7', \
-                               exec_path='/opt/augustus-2.7/bin/augustus', \
+                               #exec_path='/opt/augustus-2.7/bin/augustus', \
                                primary_site='http://bioinf.uni-greifswald.de/augustus' )
         tool.save()
 
