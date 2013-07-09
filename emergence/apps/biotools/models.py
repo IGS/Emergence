@@ -1,4 +1,5 @@
 from django.db import models
+from flow.models import FlowBlueprint
 
 """
 This module is used to describe bioinformatics tools, their formats, and interdependencies.
@@ -52,6 +53,9 @@ class Tool( models.Model ):
     ## note: https://docs.djangoproject.com/en/dev/topics/db/models/#extra-fields-on-many-to-many-relationships
     files = models.ManyToManyField( Filetype, through='ToolFiletype' )
 
+    class Meta:
+        unique_together = (('name', 'version'),)
+
 
 
 class StandaloneTool( Tool ):
@@ -59,10 +63,11 @@ class StandaloneTool( Tool ):
     #  are satisfied for any given installation.
     enabled = models.BooleanField( default=False )
 
-    #class Meta:
-        #unique_together = (('name', 'version'),)
+    flow = models.ForeignKey( FlowBlueprint )
 
-
+    def new_flow(self):
+        return self.flow
+        
 
 class ErgatisTool( Tool ):
     pass

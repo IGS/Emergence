@@ -13,14 +13,15 @@ class Command(BaseCommand):
     help = 'Installs Augustus v2.7'
 
     def handle(self, *args, **options):
-        tool = StandaloneTool( name='Augustus', \
-                               version='2.7', \
-                               #exec_path='/opt/augustus-2.7/bin/augustus', \
-                               primary_site='http://bioinf.uni-greifswald.de/augustus' )
-        tool.save()
+        pass
+        #tool = StandaloneTool( name='Augustus', \
+        #                       version='2.7', \
+        #                       #exec_path='/opt/augustus-2.7/bin/augustus', \
+        #                       primary_site='http://bioinf.uni-greifswald.de/augustus' )
+        #tool.save()
 
-        self.add_toolfiletype( tool, 'i', 'FASTA (nucleotide)', True )
-        self.add_toolfiletype( tool, 'o', 'GFF3', True )
+        #self.add_toolfiletype( tool, 'i', 'FASTA (nucleotide)', True )
+        #self.add_toolfiletype( tool, 'o', 'GFF3', True )
 
 
 

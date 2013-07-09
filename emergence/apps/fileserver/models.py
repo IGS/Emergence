@@ -18,7 +18,7 @@ class DataCollection( models.Model ):
 
 class CollectionContents( models.Model ):
     """
-    Model which groups DataSource object (and subclasses) into SourceCollections.
+    Model which groups DataSource object (and subclasses) into DataCollections.
     Stored via the through relationship here to allow for extra fields.
     """
     source = models.ForeignKey(DataSource)
