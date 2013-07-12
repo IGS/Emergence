@@ -102,47 +102,6 @@ class StepBlueprint(models.Model):
         return self.name
 
 
-class Flow(Step):
-    TYPES = (
-        ('s', 'serial'),
-        ('p', 'parallel'),
-    )
-
-    type  = models.CharField( max_length=1, choices=TYPES )
-
-    def get_children(self):
-        # Get a list of all the attrs relating to Child models.
-        child_attrs = dict(
-            (rel.var_name, rel.get_cache_name())
-            for rel in Step._meta.get_all_related_objects()
-            if issubclass(rel.field.model, Step) and isinstance(rel.field, models.OneToOneField)
-        )
-
-        objs = []
-        for obj in self.children.all().select_related(*child_attrs.keys()):
-            # Try to find any children...
-            for child in child_attrs.values():
-                sobj = obj.__dict__.get(child)
-                if sobj is not None:
-                    break
-            objs.append(sobj)
-        return objs
-
-    def run(self):
-      #print("DEBUG: run method processing children of a {0} called: ({1})".format(self.__class__.__name__, self.name) )
-      for child in self.get_children():
-          ## if this is a flow, run it
-          if isinstance(child, Flow):
-              #print("\tDEBUG: is an instance of Flow")
-              child.run()
-
-          ## else if it's a command, execute it
-          elif isinstance(child, Command):
-              print("\tDEBUG: is an instance of Command.  Would run: {0}".format(child.exec_string))
-
-          elif hasattr(child, 'name'):
-              raise Exception("ERROR: Encountered something other than a Flow or Command when processing a Flow's children")
-
 class FlowBlueprint(StepBlueprint):
     TYPES = (
         ('s', 'serial'),
@@ -153,15 +112,15 @@ class FlowBlueprint(StepBlueprint):
 
 
     def build(self):
-        flow = Flow( name=self.name, parent=self.parent, type=self.type )
+        flow = Flow( blueprint=self, name=self.name, parent=self.parent, type=self.type )
         flow.save()
 
         ## process all children
         for child in self.get_children():
             if isinstance(child, FlowBlueprint):
-                child.build()
+                subflow = child.build()
             elif isinstance(child, CommandBlueprint):
-                command = child.build()
+                command = child.build(parent=flow)
             else:
                 raise Exception("ERROR: Encountered something other than a FlowBlueprint or CommandBlueprint when processing a FlowBlueprint's children")
 
@@ -188,21 +147,65 @@ class FlowBlueprint(StepBlueprint):
                 if sobj is not None:
                     break
             objs.append(sobj)
+        return objs      
+      
+
+class Flow(Step):
+    blueprint = models.ForeignKey( FlowBlueprint )
+  
+    TYPES = (
+        ('s', 'serial'),
+        ('p', 'parallel'),
+    )
+
+    type  = models.CharField( max_length=1, choices=TYPES )
+
+    def get_children(self):
+        # Get a list of all the attrs relating to Child models.
+        child_attrs = dict(
+            (rel.var_name, rel.get_cache_name())
+            for rel in Step._meta.get_all_related_objects()
+            if issubclass(rel.field.model, Step) and isinstance(rel.field, models.OneToOneField)
+        )
+
+        objs = []
+        for obj in self.children.all().select_related(*child_attrs.keys()):
+            # Try to find any children...
+            for child in child_attrs.values():
+                sobj = obj.__dict__.get(child)
+                if sobj is not None:
+                    break
+            objs.append(sobj)
         return objs
 
+    def get_command(self, name):
+        command = Command.objects.get(parent=self, name=name)
+        return command
+    
+    def run(self):
+      #print("DEBUG: run method processing children of a {0} called: ({1})".format(self.__class__.__name__, self.name) )
+      for child in self.get_children():
+          ## if this is a flow, run it
+          if isinstance(child, Flow):
+              child.run()
 
-class Command(Step):
-    exec_string = models.TextField()
+          ## else if it's a command, execute it
+          elif isinstance(child, Command):
+              child.run()
 
+          elif hasattr(child, 'name'):
+              raise Exception("ERROR: Encountered something other than a Flow or Command when processing a Flow's children")
+
+              
 
 class CommandBlueprint(StepBlueprint):
     ## The binary or script to execute only (no options/parameters)
     exec_path = models.TextField()
 
-    def build(self):
-        print("DEBUG: Building a CommandBlueprint with name={0} and parent={1}".format(self.name, self.parent))
-        command = Command(parent=self.parent, name=self.name)
-        exec_string = command.exec_path
+    def build(self, parent):
+        #print("DEBUG: Building a Command with name={0} and parent={1}".format(self.name, self.parent))
+        command = Command(parent=parent, blueprint=self, name=self.name)
+        exec_string = self.exec_path
 
         for param in CommandBlueprintParam.objects.filter(command=self).order_by('position'):
             ## TODO: deal with param.has_quoted_value
@@ -214,18 +217,58 @@ class CommandBlueprint(StepBlueprint):
 
         return command
 
+
+        
+class Command(Step):
+    exec_string = models.TextField()
+    blueprint = models.ForeignKey(CommandBlueprint)  
+    
+    def build_exec_string(self):
+        cmd = self.blueprint.exec_path
+        
+        for param_bp in CommandBlueprintParam.objects.filter(command=self.blueprint).order_by('position'):
+            ## as we iterate through each param of the blueprint, we see if the corresponding setting
+            #   has been made manually for the command, else only add it if it's required.
+            try:
+                ## has a command parameter been set for this blueprint param?
+                param = CommandParam.objects.get(command=self, blueprint=param_bp)
+                param_value = param_bp.build_param_value(value=param.value)
+                param_string = " {0}{1}".format(param.prefix, param_value)
+                cmd += param_string
+                
+            except CommandParam.DoesNotExist:
+                ## only add this one from the blueprint if it's a required one
+                if not param_bp.is_optional:
+                    param_value = param_bp.build_param_value()
+                    param_string = " {0}{1}".format(param_bp.prefix, param_value)
+                    cmd += param_string
+                
+            except CommandParam.MultipleObjectsReturned:
+                pass
+              
+        return cmd
+    
+    
+    def has_already_been_run(self):
+        """ Defines how we determine whether a command has been run before."""
+        if self.start_time is None:
+            return False
+        else:
+            return True
+    
+    def run(self):
+        self.exec_string = self.build_exec_string()
+        self.save()
+        print("INFO: Running command: {0}".format(self.exec_string))
+        
+    
     def set_param(self, name, val):
-        param = CommandBlueprintParam.objects.get(command=self, name=name)
-
-        ## This is less than ideal.  I want a cleaner way of building a command
-        #   with params than what we're doing here, which is essentially setting
-        #   our desired value to the default value and relying on the fact that
-        #   the blueprint isn't saved.  I also don't want three different classes
-        #   of CommandBlueprint -> CommandInstance -> Command.  Yuk.
-        #   I'm missing a design pattern here.
-        param.default_value = val
-
-
+        ## get the blueprint for the passed param name
+        bp = CommandBlueprintParam.objects.get(command=self.blueprint, name=name)
+        param = CommandParam(command=self, blueprint=bp, name=name, prefix=bp.prefix, value=val)
+        param.save()
+    
+       
 class CommandBlueprintParam(models.Model):
     command = models.ForeignKey(CommandBlueprint)
 
@@ -273,8 +316,36 @@ class CommandBlueprintParam(models.Model):
         unique_together = (('command', 'name'),)
 
 
+    def build_param_value(self, value=None):
+        param_value = None
+        
+        ## if a value wasn't passed, use the default one
+        if value is None:
+            value = self.default_value
+        
+        if not self.has_no_value:
+            if self.has_quoted_value:
+                if '"' in value:
+                    param_value = "'{0}'".format(value)
+                else:
+                    param_value = "\"{0}\"".format(value)
+            else:
+                param_value = "{0}".format(value)
+        
+        return param_value
+        
 
-
+class CommandParam(models.Model):
+    """
+    These should be generated only by CommandBlueprint.build(), which reads a store
+    of parameter definitions to generate this.  For descriptions of what each of these
+    attributes are, please see the documentation for CommandBlueprintParam
+    """
+    command = models.ForeignKey(Command)
+    blueprint = models.ForeignKey(CommandBlueprintParam)
+    name = models.CharField( max_length=200 )   ## this is redundant, but might be kept for ease of use
+    prefix =  models.CharField( max_length=200 )
+    value = models.CharField( max_length=200 )
 
 
 

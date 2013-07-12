@@ -29,7 +29,7 @@ class Command(BaseCommand):
         tool = StandaloneTool( name=tool_name, \
                                version=tool_version, \
                                primary_site='https://code.google.com/p/prodigal/', \
-                               flow=flow_bp )
+                               flow_bp=flow_bp )
         tool.save()
 
         self.add_toolfiletype( tool, 'i', 'FASTA (nucleotide)', True )

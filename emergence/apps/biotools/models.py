@@ -63,10 +63,10 @@ class StandaloneTool( Tool ):
     #  are satisfied for any given installation.
     enabled = models.BooleanField( default=False )
 
-    flow = models.ForeignKey( FlowBlueprint )
+    flow_bp = models.ForeignKey( FlowBlueprint )
 
     def new_flow(self):
-        return self.flow
+        return self.flow_bp.build()
         
 
 class ErgatisTool( Tool ):
