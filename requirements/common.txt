@@ -1,3 +1,4 @@
 # requirements/common.txt
 Django==1.6
-django-celery>=3.0.19
+Celery>=3.0.21
+rabbitmq-server>=3.1.3

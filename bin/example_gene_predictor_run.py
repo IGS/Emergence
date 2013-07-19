@@ -24,7 +24,6 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "emergence.settings.dev")
 
 from emergence.apps.fileserver.models import LocalFile
 from emergence.apps.biotools.models import StandaloneTool
-#from emergence.apps.flow.models import 
 
 example_dir = os.path.join(bin_dir, '..', 'emergence', 'data', 'examples')
 SAMPLE_GENOME = os.path.join(example_dir, 'Escherichia_coli_K12_DH10B', \

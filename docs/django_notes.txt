@@ -54,3 +54,10 @@ Celery: Distributed Task Queue
 
   I had to manually fix this file, removing the import and single call to force_unicode, which isn'
   necessary in Django 1.6
+
+-= Celery =-
+First steps with celery (3.0.21)
+http://docs.celeryproject.org/en/latest/getting-started/first-steps-with-celery.html#first-steps
+
+Using RabbitMQ
+http://docs.celeryproject.org/en/latest/getting-started/brokers/rabbitmq.html#broker-rabbitmq

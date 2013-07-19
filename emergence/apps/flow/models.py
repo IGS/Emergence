@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
+from flow.executor import run
+#from celery.result import AsyncResult
 
 """
 The purpose of the classes within the 'flow' application is to allow users to run
@@ -221,7 +223,13 @@ class CommandBlueprint(StepBlueprint):
         
 class Command(Step):
     exec_string = models.TextField()
-    blueprint = models.ForeignKey(CommandBlueprint)  
+    blueprint = models.ForeignKey(CommandBlueprint)
+
+    ## This can be used to check the state of the task, wait for the task to finish or
+    #  get its return value (or if the task failed, the exception and traceback)
+    #  http://docs.celeryproject.org/en/latest/reference/celery.result.html#celery.result.AsyncResult
+    #  The ID values look like: d09f8528-f471-4125-8b58-82fce932d59e
+    task_id = models.CharField(max_length=50, null=True)
     
     def build_exec_string(self):
         cmd = self.blueprint.exec_path
@@ -259,7 +267,12 @@ class Command(Step):
     def run(self):
         self.exec_string = self.build_exec_string()
         self.save()
-        print("INFO: Running command: {0}".format(self.exec_string))
+
+        ## TODO: this needs to be abstracted out to execution environments.  Testing like
+        #   this for now.
+        task = run.delay( self )
+        self.task_id = task.id
+        self.save()
         
     
     def set_param(self, name, val):
@@ -299,6 +312,12 @@ class CommandBlueprintParam(models.Model):
 
     ## Is this parameter optional?
     is_optional = models.BooleanField( default=True )
+
+    ## This is rather subjective, but if a program provides an enormous number of
+    #   options mark the ones that would only rarely be used as False here.  Interface
+    #   bits only show the primary options at first, allowing users to expand their
+    #   configuration view if they want to see all other options too.
+    is_primary_option = models.BooleanField( default=True )
 
     ## This should be set to True for those parameters which are an option/prefix
     #   only with no corresponding value to pass.  Example:  wc -l
@@ -346,6 +365,8 @@ class CommandParam(models.Model):
     name = models.CharField( max_length=200 )   ## this is redundant, but might be kept for ease of use
     prefix =  models.CharField( max_length=200 )
     value = models.CharField( max_length=200 )
+    
+    
 
 
 
