@@ -4,6 +4,8 @@
 #
 ## https://docs.djangoproject.com/en/dev/howto/custom-management-commands/
 
+import configparser
+import os
 from django.core.management.base import BaseCommand, CommandError
 from emergence.apps.biotools.models import StandaloneTool, Filetype, ToolFiletype
 from emergence.apps.flow.models import CommandBlueprint, CommandBlueprintParam, FlowBlueprint
@@ -21,10 +23,13 @@ class Command(BaseCommand):
             print("INFO: tool {0} {1} already exists.  Skipping.".format(tool_name, tool_version) )
             return True
 
+        settings = configparser.ConfigParser()
+        settings.read( os.path.join( os.path.abspath(os.path.dirname(__file__)), '../../settings.ini') )
+
+        tool_settings = settings[ "{0} {1}".format(tool_name, tool_version) ]
+
         flow_bp = FlowBlueprint( type='s' )
         flow_bp.save()
-
-        #print("DEBUG: flow_pb, just saved, is a:{0}".format(flow_bp) )
 
         tool = StandaloneTool( name=tool_name, \
                                version=tool_version, \
@@ -36,11 +41,10 @@ class Command(BaseCommand):
         self.add_toolfiletype( tool, 'o', 'GenBank Flat File Format', False )
         self.add_toolfiletype( tool, 'o', 'GFF3', False )
 
-        #print("DEBUG: Attempting to save a CommandBlueprint with parent:{0}".format(flow_bp) )
 
         command_bp = CommandBlueprint( parent = flow_bp, \
                                        name = 'Run prodigal', \
-                                       exec_path = '/opt/prodigal-2.60/bin/prodigal' )
+                                       exec_path = tool_settings['exec_path'] )
         command_bp.save()
 
         CommandBlueprintParam( command=command_bp, name='-a', prefix='-a ', position=1, \
