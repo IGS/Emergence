@@ -50,7 +50,7 @@
     }
 },
 {
-    "pk": 5, 
+    "pk": 6, 
     "model": "biotools.filetype", 
     "fields": {
         "spec_url": "http://nar.oxfordjournals.org/content/38/6/1767", 
@@ -59,6 +59,36 @@
         "format": "FASTQ"
     }
 },
+{
+    "pk": 7, 
+    "model": "biotools.filetype", 
+    "fields": {
+        "spec_url": "http://nar.oxfordjournals.org/content/38/6/1767", 
+        "variant": "Sanger", 
+        "name": "FASTQ (paired reads, left)", 
+        "format": "FASTQ"
+    }
+},
+{
+    "pk": 8, 
+    "model": "biotools.filetype", 
+    "fields": {
+        "spec_url": "http://nar.oxfordjournals.org/content/38/6/1767", 
+        "variant": "Sanger", 
+        "name": "FASTQ (paired reads, right)", 
+        "format": "FASTQ"
+    }
+},
+{
+    "pk": 9, 
+    "model": "biotools.filetype", 
+    "fields": {
+        "spec_url": "http://nar.oxfordjournals.org/content/38/6/1767", 
+        "variant": "Sanger", 
+        "name": "FASTQ (unpaired reads)", 
+        "format": "FASTQ"
+    }
+},   
 {
     "pk": 3, 
     "model": "biotools.tool", 

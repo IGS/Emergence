@@ -24,6 +24,9 @@ class Filetype( models.Model ):
     variant   = models.CharField( max_length=100, default="canonical" )
     spec_url  = models.URLField()
 
+    class Meta:
+        unique_together = (('format', 'variant', 'name'),)
+
 
 class Tool( models.Model ):
     """
@@ -92,6 +95,6 @@ class ToolFiletype( models.Model ):
     )
     io_type = models.CharField( max_length=1, choices=IO_TYPES )
 
-
+    
 
 
