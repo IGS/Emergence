@@ -1,6 +1,6 @@
 
 ## This should not be run directly.  Instead, run as a command through manage.py like:
-#   python3 manage.py biotools load_all
+#   python3 manage.py biotools load_all_biotools
 #
 ## https://docs.djangoproject.com/en/dev/howto/custom-management-commands/
 from django.core.management import find_management_module, find_commands, load_command_class
@@ -20,7 +20,7 @@ class Command(BaseCommand):
         for app_name in app_names:
             command_names = find_commands(find_management_module(app_name))
             for command_name in command_names:
-                if command_name == 'load_all':
+                if command_name == 'load_all_biotools':
                     continue
 
                 command = load_command_class(app_name, command_name)
