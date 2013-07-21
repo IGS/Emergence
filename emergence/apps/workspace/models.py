@@ -1,4 +1,6 @@
 from django.db import models
+from flow.models import Flow
+from fileserver.models import DataSource
 
 """
 The workspace app ties together the more independent apps like 'flow' and 'biotools', extending
@@ -17,7 +19,9 @@ from django.contrib.auth.models import User, Group
 
 
 class Workspace(models.Model):
-    name = models.CharField(max_length=100)
+    name    = models.CharField(max_length=100)
+    flows   = models.ManyToManyField( Flow )
+    data    = models.ManyToManyField( DataSource )
     # user = User()
     
     def __str__(self):
