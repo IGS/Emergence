@@ -154,6 +154,7 @@ class FlowBlueprint(StepBlueprint):
 
 class Flow(Step):
     blueprint = models.ForeignKey( FlowBlueprint )
+    description = models.TextField(  )
   
     TYPES = (
         ('s', 'serial'),
