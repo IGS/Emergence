@@ -55,7 +55,7 @@ class Command(BaseCommand):
             is_optional=False, short_desc='Type of reads: (cfa, cfq, fa, or fq)' ).save()
 
         CommandBlueprintParam( command=command_bp, name='--JM', prefix='--JM ', position=2, \
-            is_optional=False, short_desc='Type of reads: (cfa, cfq, fa, or fq)' ).save()
+            is_optional=False, short_desc='Number of GB of system memory to use for k-mer counting by jellyfish (eg. 10G).  Include the G character.' ).save()
 
         CommandBlueprintParam( command=command_bp, name='--left', prefix='--left ', position=3, \
             short_desc='Left reads' ).save()
