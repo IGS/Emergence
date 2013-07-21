@@ -28,7 +28,8 @@ class Command(BaseCommand):
 
         tool_settings = settings[ "{0} {1}".format('Trinity', tool_version) ]
 
-        flow_bp = FlowBlueprint( type='s' )
+        flow_bp = FlowBlueprint( type='s', \
+                                 description='Large RNA-Seq data sets, such as those exceeding 300M pairs, are best suited for in silico normalization prior to running Trinity, in order to reduce memory requirements and greatly improve upon runtimes. Before running the normalization, be sure that in the case of paired reads, the left read names end with suffix /1 and the right read names end with /2')
         flow_bp.save()
 
         tool = StandaloneTool( name=tool_name, \

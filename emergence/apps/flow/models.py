@@ -105,6 +105,9 @@ class StepBlueprint(models.Model):
 
 
 class FlowBlueprint(StepBlueprint):
+    ## Long description to describe a stored Flow, usually added by the Flows author in the load script.
+    description = models.TextField()
+    
     TYPES = (
         ('s', 'serial'),
         ('p', 'parallel'),
@@ -154,7 +157,9 @@ class FlowBlueprint(StepBlueprint):
 
 class Flow(Step):
     blueprint = models.ForeignKey( FlowBlueprint )
-    description = models.TextField(  )
+
+    ## This should usually be set by the user to describe their own particular instance of the pipeline.
+    description = models.TextField()
   
     TYPES = (
         ('s', 'serial'),
