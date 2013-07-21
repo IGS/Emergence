@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     'emergence.apps.coreui',
     'emergence.apps.fileserver',
     'emergence.apps.flow',
+    'emergence.apps.workspace',
     #'djcelery'
 )
 
