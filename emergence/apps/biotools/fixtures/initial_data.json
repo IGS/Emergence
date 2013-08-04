@@ -88,54 +88,5 @@
         "name": "FASTQ (unpaired reads)", 
         "format": "FASTQ"
     }
-},   
-{
-    "pk": 3, 
-    "model": "biotools.tool", 
-    "fields": {
-        "version": "3.02", 
-        "name": "Glimmer3",
-        "primary_site": "http://www.cbcb.umd.edu/software/glimmer/"
-    }
-},
-{
-    "pk": 4, 
-    "model": "biotools.tool", 
-    "fields": {
-        "version": "", 
-        "name": "Digital normalization (single-pass)",
-        "primary_site": "https://github.com/ctb/khmer",
-        "publication": "http://arxiv.org/abs/1203.4802"
-    }
-},
-{
-    "pk": 7, 
-    "model": "biotools.toolfiletype", 
-    "fields": {
-        "tool": 3, 
-        "required": true, 
-        "io_type": "i", 
-        "filetype": 3
-    }
-},
-{
-    "pk": 8, 
-    "model": "biotools.toolfiletype", 
-    "fields": {
-        "tool": 4, 
-        "required": true, 
-        "io_type": "i", 
-        "filetype": 5
-    }
-},
-{
-    "pk": 9, 
-    "model": "biotools.toolfiletype", 
-    "fields": {
-        "tool": 4, 
-        "required": true, 
-        "io_type": "o", 
-        "filetype": 5
-    }
 }
 ]
