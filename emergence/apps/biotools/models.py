@@ -24,6 +24,9 @@ class Filetype( models.Model ):
     variant   = models.CharField( max_length=100, default="canonical" )
     spec_url  = models.URLField()
 
+    def __str__(self):
+        return self.name
+
     class Meta:
         unique_together = (('format', 'variant', 'name'),)
 
@@ -55,6 +58,9 @@ class Tool( models.Model ):
 
     ## note: https://docs.djangoproject.com/en/dev/topics/db/models/#extra-fields-on-many-to-many-relationships
     files = models.ManyToManyField( Filetype, through='ToolFiletype' )
+
+    def __str__(self):
+        return self.name
 
     class Meta:
         unique_together = (('name', 'version'),)
