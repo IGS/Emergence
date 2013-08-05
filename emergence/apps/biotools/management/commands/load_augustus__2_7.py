@@ -1,6 +1,6 @@
 
 ## This should not be run directly.  Instead, run as a command through manage.py like:
-#   python3 manage.py biotools load_augustus_2.7
+#   python3 manage.py biotools load_augustus_2_7
 #
 ## https://docs.djangoproject.com/en/dev/howto/custom-management-commands/
 
