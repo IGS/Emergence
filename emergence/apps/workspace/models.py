@@ -1,6 +1,8 @@
 from django.db import models
+from biotools.models import Tool
 from flow.models import Flow
 from fileserver.models import DataSource
+
 
 """
 The workspace app ties together the more independent apps like 'flow' and 'biotools', extending
@@ -26,3 +28,15 @@ class Workspace(models.Model):
     
     def __str__(self):
         return self.name
+
+    def add_data(self, data_source):
+        self.data.add(data_source)
+
+    def get_available_tools(self):
+        # Iterate through all tools here.  In the future we'll want to do some
+        #  intelligent sorting here, such as by tool popularity
+        tools = Tool.objects.all()
+        return tools
+
+        #for tool in tools:
+            

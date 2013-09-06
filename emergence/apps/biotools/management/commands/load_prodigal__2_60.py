@@ -37,10 +37,6 @@ class Command(BaseCommand):
                                flow_bp=flow_bp )
         tool.save()
 
-        self.add_toolfiletype( tool, 'i', 'FASTA (nucleotide)', True )
-        self.add_toolfiletype( tool, 'o', 'GenBank Flat File Format', False )
-        self.add_toolfiletype( tool, 'o', 'GFF3', False )
-
 
         command_bp = CommandBlueprint( parent = flow_bp, \
                                        name = 'Run prodigal', \
@@ -86,11 +82,9 @@ class Command(BaseCommand):
             long_desc='Write a training file (if none exists); otherwise, read and use the specified training file' ).save()
 
 
-
-    def add_toolfiletype(self, tool, iotype, ft_name, req):
-        ft = Filetype.objects.get( name=ft_name )
-        ToolFiletype( tool=tool, required=req, io_type=iotype, filetype=ft ).save()
-
+        tool.needs( filetype_name='FASTA (nucleotide)', via_command=command_bp, via_param='-i' )
+        tool.can_create( filetype_name='GenBank Flat File Format', via_command=command_bp, via_params=['-o', '-f=gbk'] )
+        tool.can_create( filetype_name='GFF3', via_command=command_bp, via_params=['-o', '-f=gff'] )
 
     def already_exists(self, name, version):
         flt = StandaloneTool.objects.filter(name=name, version=version)

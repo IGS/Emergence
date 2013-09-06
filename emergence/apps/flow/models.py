@@ -105,8 +105,15 @@ class StepBlueprint(models.Model):
 
 
 class FlowBlueprint(StepBlueprint):
-    ## Long description to describe a stored Flow, usually added by the Flows author in the load script.
+    """
+    description - Long description to describe a stored Flow, usually added by the
+    Flows author in the load script.
+    """
     description = models.TextField()
+
+    # should we use this instead?
+    #  https://github.com/chrisspen/django-python-code-field
+    conditional_code = models.TextField()
     
     TYPES = (
         ('s', 'serial'),
@@ -158,8 +165,13 @@ class FlowBlueprint(StepBlueprint):
 class Flow(Step):
     blueprint = models.ForeignKey( FlowBlueprint )
 
-    ## This should usually be set by the user to describe their own particular instance of the pipeline.
+    # This should usually be set by the user to describe their own particular instance of the pipeline.
     description = models.TextField()
+
+    # This will be the code from the blueprint but with any variables replaced
+    conditional_code = models.TextField()
+    
+    # This will be "None" unless this is a conditional flow    conditional_result = models.BooleanField( default = None )
   
     TYPES = (
         ('s', 'serial'),
@@ -371,7 +383,6 @@ class CommandParam(models.Model):
     name = models.CharField( max_length=200 )   ## this is redundant, but might be kept for ease of use
     prefix =  models.CharField( max_length=200 )
     value = models.CharField( max_length=200 )
-    
     
 
 

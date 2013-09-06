@@ -1,0 +1,19 @@
+{
+    "pk": 3, 
+    "model": "biotools.tool", 
+    "fields": {
+        "version": "3.02", 
+        "name": "Glimmer3",
+        "primary_site": "http://www.cbcb.umd.edu/software/glimmer/"
+    }
+},
+{
+    "pk": 4, 
+    "model": "biotools.tool", 
+    "fields": {
+        "version": "", 
+        "name": "Digital normalization (single-pass)",
+        "primary_site": "https://github.com/ctb/khmer",
+        "publication": "http://arxiv.org/abs/1203.4802"
+    }
+},

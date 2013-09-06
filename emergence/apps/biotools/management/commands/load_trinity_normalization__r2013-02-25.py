@@ -38,13 +38,13 @@ class Command(BaseCommand):
                                flow_bp=flow_bp )
         tool.save()
 
-        self.add_toolfiletype( tool, 'i', 'FASTQ (paired reads, left)', False )
-        self.add_toolfiletype( tool, 'i', 'FASTQ (paired reads, right)', False )
-        self.add_toolfiletype( tool, 'i', 'FASTQ (unpaired reads)', False )
+        self.add_toolfiletype( tool, 'i', 'FASTQ (Sanger, paired reads, left)', False )
+        self.add_toolfiletype( tool, 'i', 'FASTQ (Sanger, paired reads, right)', False )
+        self.add_toolfiletype( tool, 'i', 'FASTQ (Sanger, unpaired reads)', False )
         
-        self.add_toolfiletype( tool, 'o', 'FASTQ (paired reads, left)', False )
-        self.add_toolfiletype( tool, 'o', 'FASTQ (paired reads, right)', False )
-        self.add_toolfiletype( tool, 'o', 'FASTQ (unpaired reads)', False )
+        self.add_toolfiletype( tool, 'o', 'FASTQ (Sanger, paired reads, left)', False )
+        self.add_toolfiletype( tool, 'o', 'FASTQ (Sanger, paired reads, right)', False )
+        self.add_toolfiletype( tool, 'o', 'FASTQ (Sanger, unpaired reads)', False )
 
 
         command_bp = CommandBlueprint( parent = flow_bp, \

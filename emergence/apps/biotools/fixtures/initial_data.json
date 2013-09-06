@@ -64,8 +64,8 @@
     "model": "biotools.filetype", 
     "fields": {
         "spec_url": "http://nar.oxfordjournals.org/content/38/6/1767", 
-        "variant": "Sanger", 
-        "name": "FASTQ (paired reads, left)", 
+        "variant": "Sanger (paired-end, left)", 
+        "name": "FASTQ (Sanger, paired reads, left)", 
         "format": "FASTQ"
     }
 },
@@ -74,8 +74,8 @@
     "model": "biotools.filetype", 
     "fields": {
         "spec_url": "http://nar.oxfordjournals.org/content/38/6/1767", 
-        "variant": "Sanger", 
-        "name": "FASTQ (paired reads, right)", 
+        "variant": "Sanger (paired-end, right)", 
+        "name": "FASTQ (Sanger, paired reads, right)", 
         "format": "FASTQ"
     }
 },
@@ -84,9 +84,39 @@
     "model": "biotools.filetype", 
     "fields": {
         "spec_url": "http://nar.oxfordjournals.org/content/38/6/1767", 
-        "variant": "Sanger", 
-        "name": "FASTQ (unpaired reads)", 
+        "variant": "Sanger (unpaired reads)", 
+        "name": "FASTQ (Sanger, unpaired reads)", 
         "format": "FASTQ"
+    }
+},
+{
+    "pk": 10, 
+    "model": "biotools.filetype", 
+    "fields": {
+        "spec_url": "http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml", 
+        "variant": "nucleotide (paired reads, left)", 
+        "name": "FASTA (paired reads, left)", 
+        "format": "FASTA"
+    }
+},
+{
+    "pk": 11, 
+    "model": "biotools.filetype", 
+    "fields": {
+        "spec_url": "http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml", 
+        "variant": "nucleotide (paired reads, right)", 
+        "name": "FASTA (paired reads, right)", 
+        "format": "FASTA"
+    }
+},
+{
+    "pk": 12, 
+    "model": "biotools.filetype", 
+    "fields": {
+        "spec_url": "http://www.ncbi.nlm.nih.gov/BLAST/blastcgihelp.shtml", 
+        "variant": "nucleotide (unpaired reads)", 
+        "name": "FASTA (unpaired reads)", 
+        "format": "FASTA"
     }
 }
 ]

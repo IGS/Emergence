@@ -10,6 +10,9 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+# For Celery / RabbitMQ
+BROKER_URL = 'amqp://guest@jorvisvm-lx:5672/'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -122,6 +125,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    #'django_extensions',
     'emergence.apps.biotools',
     'emergence.apps.coreui',
     'emergence.apps.fileserver',
