@@ -40,6 +40,13 @@ class Tool( models.Model ):
 
     Most simply, a tool should be thought of us a unit of analysis that can require some number
     of inputs and generates at least one output.
+    
+    Telationships with FileTypes:
+    
+        needs (input implied)
+        can_use (input optional)
+        creates (output implied)
+        can_create (output optional)
     """
 
     ## Do not include version numbers in the name
@@ -66,9 +73,9 @@ class Tool( models.Model ):
     class Meta:
         unique_together = (('name', 'version'),)
 
-    def can_create(self, filetype_name=None, via_command=None, via_param=None, via_params=None ):
+    def can_create( self, filetype_name=None, via_command=None, via_param=None, via_params=None ):
         """
-        Defines an optional output created by this tool.
+        Defines an optional output created by this tool, which corresponds to a loaded Filetype object
         """
         ft = Filetype.objects.get( name=filetype_name )
         tft = ToolFiletype( tool=self, required=False, io_type='o', filetype=ft )
@@ -76,7 +83,17 @@ class Tool( models.Model ):
 
         self._add_toolfiletypeparams( tft, via_command, via_param, via_params )
 
-    def needs(self, filetype_name=None, via_command=None, via_param=None, via_params=None ):
+    def creates( self, filetype_name=None, via_command=None, via_param=None, via_params=None):
+        """
+        Defines a required output created by this tool, which corresponds to a loaded Filetype object
+        """
+        ft = Filetype.objects.get( name=filetype_name )
+        tft = ToolFiletype( tool=self, required=True, io_type='o', filetype=ft )
+        tft.save()
+
+        self._add_toolfiletypeparams( tft, via_command, via_param, via_params )
+
+    def needs( self, filetype_name=None, via_command=None, via_param=None, via_params=None ):
         """
         Defines a required input of this tool, which corresponds to a loaded Filetype object.
         """
@@ -86,6 +103,15 @@ class Tool( models.Model ):
 
         self._add_toolfiletypeparams( tft, via_command, via_param, via_params )
 
+    def can_use(self, filetype_name=None, via_command=None, via_param=None, via_params=None):
+        """
+        Defines an optional input of this tool, which corresponds to a loaded Filetype object
+        """
+        ft = Filetype.objects.get( name=filetype_name )
+        tft = ToolFiletype( tool=self, required=False, io_type='i', filetype=ft )
+        tft.save()
+
+        self._add_toolfiletypeparams( tft, via_command, via_param, via_params )
 
     def _add_toolfiletypeparams(self, tft, command_bp, via_param, via_params):
         # It doesn't make sense to define both via_param and via_params
@@ -107,7 +133,7 @@ class Tool( models.Model ):
                 param_strings.append( via_param )
 
         for param_string in param_strings:
-           if "=" in param_string:
+            if "=" in param_string:
                 parts = param_string.split("=")
                 param_tuples.append( [ parts[0], parts[1] ] )
             else:
@@ -152,8 +178,6 @@ class ToolFiletype( models.Model ):
         creates (output implied)
         can_create (output optional)
         
-    Each of the above relationships are usually implemented in the form of a flow.CommandParam, which doesn't
-    add an additional cross-app dependency.  biotools was already aware of flow
     """
     tool = models.ForeignKey(Tool)
     filetype = models.ForeignKey(Filetype)
