@@ -69,8 +69,6 @@ class Tool( models.Model ):
     def can_create(self, filetype_name=None, via_command=None, via_param=None, via_params=None ):
         """
         Defines an optional output created by this tool.
-
-        TODO: it makes sense that the user can define what options do this here
         """
         ft = Filetype.objects.get( name=filetype_name )
         tft = ToolFiletype( tool=self, required=False, io_type='o', filetype=ft )
@@ -81,8 +79,6 @@ class Tool( models.Model ):
     def needs(self, filetype_name=None, via_command=None, via_param=None, via_params=None ):
         """
         Defines a required input of this tool, which corresponds to a loaded Filetype object.
-
-        TODO: it makes sense that the user can define what option needs this here
         """
         ft = Filetype.objects.get( name=filetype_name )
         tft = ToolFiletype( tool=self, required=True, io_type='i', filetype=ft )
@@ -95,25 +91,36 @@ class Tool( models.Model ):
         # It doesn't make sense to define both via_param and via_params
         if via_param is not None and via_params is not None:
             raise Exception("ERROR: cannot pass both via_param and via_params")
-        
-        if via_param is not None:
-            if "=" in via_param:
-                parts = via_param.split(str="=")
-                cbp_param = CommandBlueprintParam.objects.get( command=command_bp, name=parts[0] )
-                ToolFiletypeParam( toolfiletype=tft, \
-                                   command_bp=command_bp, \
-                                   commandblueprintparam=cbp_param, \
-                                   value=parts[1] ).save()
-            else:
-                cbp_param = CommandBlueprintParam.objects.get( command=command_bp, name=via_param )
-                ToolFiletypeParam( toolfiletype=tft, \
-                                   command_bp=command_bp, \
-                                   commandblueprintparam=cbp_param ).save()
-        
-        #if via_params is not None:
-            #raise Exception("ERROR: TODO: via_params option not yet handled.")
 
-        #ToolFiletypeParam( toofiletype=tft, commandblueprintparam=?, value=? )
+        # these are the option strings which are parsed into param_tuples (below)
+        param_strings = list()
+        
+        # these are the parsed versions of individual parameters, where each element is a
+        #  tuple of [opt, value] where value can be None
+        param_tuples = list()
+
+        if via_param is not None:
+            param_strings.append( via_param )
+        
+        elif via_params is not None:
+            for via_param in via_params:
+                param_strings.append( via_param )
+
+        for param_string in param_strings:
+           if "=" in param_string:
+                parts = param_string.split("=")
+                param_tuples.append( [ parts[0], parts[1] ] )
+            else:
+                param_tuples.append( [param_string, None] )
+
+        for param in param_tuples:
+            cbp_param = CommandBlueprintParam.objects.get( command=command_bp, name=param[0] )
+            ToolFiletypeParam( toolfiletype=tft, \
+                               command_bp=command_bp, \
+                               commandblueprintparam=cbp_param, \
+                               value=param[1] ).save()
+
+
 
 
 class StandaloneTool( Tool ):
@@ -178,5 +185,8 @@ class ToolFiletypeParam( models.Model ):
     toolfiletype = models.ForeignKey( ToolFiletype )
     command_bp = models.ForeignKey( CommandBlueprint )
     commandblueprintparam = models.ForeignKey( CommandBlueprintParam )
-    value = models.CharField( max_length=200, blank=True )
+    
+    # There are warnings in the model docs about setting null=true on CharFields, but I couldn't get it to
+    #  work otherwise.
+    value = models.CharField( max_length=200, null=True )
     
