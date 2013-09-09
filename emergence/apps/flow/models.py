@@ -316,7 +316,7 @@ class CommandBlueprintParam(models.Model):
     #   tool --input foo.fna            prefix = "--input "
     #   tool --input=foo.fna            prefix = "--input="
     #   tool foo.fna                    prefix = None or ''
-    prefix =  models.CharField( max_length=200 )
+    prefix =  models.CharField( max_length=200, null=True )
 
     ## Some tools require their parameters to be in a specific order
     ## These don't to be unique but are only guaranteed to be sorted by this field.
