@@ -38,14 +38,6 @@ class Command(BaseCommand):
                                flow_bp=flow_bp )
         tool.save()
 
-        self.add_toolfiletype( tool, 'i', 'FASTQ (Sanger, paired reads, left)', False )
-        self.add_toolfiletype( tool, 'i', 'FASTQ (Sanger, paired reads, right)', False )
-        self.add_toolfiletype( tool, 'i', 'FASTQ (Sanger, unpaired reads)', False )
-        
-        self.add_toolfiletype( tool, 'o', 'FASTQ (Sanger, paired reads, left)', False )
-        self.add_toolfiletype( tool, 'o', 'FASTQ (Sanger, paired reads, right)', False )
-        self.add_toolfiletype( tool, 'o', 'FASTQ (Sanger, unpaired reads)', False )
-
 
         command_bp = CommandBlueprint( parent = flow_bp, \
                                        name = 'Run Trinity read normalization', \
@@ -101,12 +93,18 @@ class Command(BaseCommand):
         CommandBlueprintParam( command=command_bp, name='--max_pct_stdev', prefix='--max_pct_stdev ', position=13, \
             short_desc='Maximum pct of mean for stdev of kmer coverage across read', default_value='100' ).save()
 
+        # TODO: parameter grouping needs to be applied here.
+        tool.can_use( filetype_name='FASTQ (Sanger, paired reads, left)', via_command=command_bp, via_param='--left' )
+        tool.can_use( filetype_name='FASTQ (Sanger, paired reads, right)', via_command=command_bp, via_param='--right' )
+        tool.can_use( filetype_name='FASTQ (Sanger, unpaired reads)', via_command=command_bp, via_param='--single' )
 
-
-
-    def add_toolfiletype(self, tool, iotype, ft_name, req):
-        ft = Filetype.objects.get( name=ft_name )
-        ToolFiletype( tool=tool, required=req, io_type=iotype, filetype=ft ).save()
+        # TODO: parameter grouping needs to be applied here.
+        # TODO: needs improving.  Unfortunately, Trinity currently only supports output definition
+        #  at the directory level, and the file names under that are created by convention.
+        #  I've written Brian to see if I can add this
+        tool.can_create( filetype_name='FASTQ (Sanger, paired reads, left)', via_command=command_bp, via_param='--output' )
+        tool.can_create( filetype_name='FASTQ (Sanger, paired reads, right)', via_command=command_bp, via_param='--output' )
+        tool.can_create( filetype_name='FASTQ (Sanger, unpaired reads)', via_command=command_bp, via_param='--output' )
 
 
     def already_exists(self, name, version):
