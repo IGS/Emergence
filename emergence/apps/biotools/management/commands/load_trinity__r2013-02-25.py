@@ -38,12 +38,6 @@ class Command(BaseCommand):
                                flow_bp=flow_bp )
         tool.save()
 
-        self.add_toolfiletype( tool, 'i', 'FASTQ (Sanger, paired reads, left)', False )
-        self.add_toolfiletype( tool, 'i', 'FASTQ (Sanger, paired reads, right)', False )
-        self.add_toolfiletype( tool, 'i', 'FASTQ (Sanger, unpaired reads)', False )
-        
-        self.add_toolfiletype( tool, 'o', 'FASTA (nucleotide)', True )
-
 
         command_bp = CommandBlueprint( parent = flow_bp, \
                                        name = 'Run Trinity', \
@@ -126,11 +120,21 @@ class Command(BaseCommand):
         CommandBlueprintParam( command=command_bp, name='--bflyCalculateCPU', prefix='--bflyCalculateCPU ', position=21, \
             short_desc='Calculate CPUs based on 805 of max_memory divided by bflyHeapSpaceMax' ).save()
 
+        # TODO: needs improving.  Unfortunately, Trinity currently only supports output definition
+        #  at the directory level, and the file names under that are created by convention.
+        #  I've written Brian to see if I can add this
+        tool.creates( filetype_name='FASTA (nucleotide)', via_command=command_bp, via_param='--output' )
+    
+        # TODO: parameter grouping needs to be applied here.
+        tool.can_use( filetype_name='FASTQ (Sanger, paired reads, left)', via_command=command_bp, via_param='--left' )
+        tool.can_use( filetype_name='FASTQ (Sanger, paired reads, right)', via_command=command_bp, via_param='--right' )
+        tool.can_use( filetype_name='FASTQ (Sanger, unpaired reads)', via_command=command_bp, via_param='--single' )
 
+        # TODO: parameter grouping needs to be applied here.
+        tool.can_use( filetype_name='FASTA (paired reads, left)', via_command=command_bp, via_param='--left' )
+        tool.can_use( filetype_name='FASTA (paired reads, right)', via_command=command_bp, via_param='--right' )
+        tool.can_use( filetype_name='FASTA (unpaired reads)', via_command=command_bp, via_param='--single' )
 
-    def add_toolfiletype(self, tool, iotype, ft_name, req):
-        ft = Filetype.objects.get( name=ft_name )
-        ToolFiletype( tool=tool, required=req, io_type=iotype, filetype=ft ).save()
 
 
     def already_exists(self, name, version):
