@@ -118,5 +118,25 @@
         "name": "FASTA (unpaired reads)", 
         "format": "FASTA"
     }
+},
+{
+    "pk": 13, 
+    "model": "biotools.filetype", 
+    "fields": {
+        "spec_url": "http://bowtie-bio.sourceforge.net/index.shtml", 
+        "variant": "1.0", 
+        "name": "Bowtie 1.0 index", 
+        "format": "Bowtie index"
+    }
+},
+{
+    "pk": 14, 
+    "model": "biotools.filetype", 
+    "fields": {
+        "spec_url": "http://bowtie-bio.sourceforge.net/bowtie2/manual.shtml#the-bowtie2-build-indexer", 
+        "variant": "2.0", 
+        "name": "Bowtie 2.0 index", 
+        "format": "Bowtie index"
+    }
 }
 ]
