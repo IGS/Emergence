@@ -138,5 +138,15 @@
         "name": "Bowtie 2.0 index", 
         "format": "Bowtie index"
     }
+},
+{
+    "pk": 15, 
+    "model": "biotools.filetype", 
+    "fields": {
+        "spec_url": "http://mummer.sourceforge.net/manual/#nucmer", 
+        "variant": "canonical", 
+        "name": "MUMmer delta file", 
+        "format": "Mummer delta"
+    }
 }
 ]
