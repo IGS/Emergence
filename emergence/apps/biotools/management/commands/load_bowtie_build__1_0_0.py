@@ -13,10 +13,10 @@ from emergence.apps.flow.models import CommandBlueprint, CommandBlueprintParam, 
 class Command(BaseCommand):
     ## write messages via self.stdout.write and self.stderr.write
     args = 'None'
-    help = 'Installs Bowtie 1.0.0 and tools'
+    help = 'Installs Bowtie-build 1.0.0'
 
     def handle(self, *args, **options):
-        tool_name = 'Bowtie'
+        tool_name = 'Bowtie-build'
         tool_version = '1.0.0'
         
         if self.already_exists(tool_name, tool_version):
