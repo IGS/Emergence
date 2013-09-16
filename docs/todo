@@ -3,3 +3,4 @@
 - Preset, named parameter configurations.  Model them.
 - The interface needs a consistent file preview ability that supports gzip peeking
 - We need to have a central repository of flows which primarily serves to track flow usage.  Phone home capability should be built in (and configurable.)
+- Named tool palettes, possibly from EDAM tags
