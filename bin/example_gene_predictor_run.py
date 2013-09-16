@@ -60,6 +60,9 @@ def main():
         print("Gene prediction state is: {0}".format(flow.get_state_display()) )
         sleep(1)
         
+    output = command.get_param( name='-o' )
+    print("{0} completed.  Output written to: {1}".format(command.name, output.value))
+
     
 
     
