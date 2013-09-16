@@ -1,6 +1,6 @@
 
 ## This should not be run directly.  Instead, run as a command through manage.py like:
-#   python3 manage.py biotools load_trinity_bowtie__1_0_0
+#   python3 manage.py biotools load_bowtie__1_0_0
 #
 
 
