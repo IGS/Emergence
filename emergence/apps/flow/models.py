@@ -81,8 +81,8 @@ class Step(models.Model):
         ('p', 'pending'),
         ('r', 'running'),
         ('c', 'complete'),
-        ('e', 'error'),
-        ('f', 'failed'),
+        ('e', 'error'),     # couldn't even execute, error building command
+        ('f', 'failed'),    # executed correctly, failure returned by command
         ('k', 'killed'),
     )
 
@@ -91,6 +91,22 @@ class Step(models.Model):
     def __str__(self):
         return self.name
 
+    def has_executed(self):
+        """
+        This doesn't imply success or failure.  Rather, it returns True if an execution has been attempted
+        and a terminal state has been received.
+        """
+        if self.state == 'c' or self.state == 'e' or self.state == 'f' or self.state == 'k':
+            return True
+        else:
+            return False
+
+    def is_executing(self):
+        if self.state == 'p' or self.state == 'r':
+            return True
+        else:
+            return False
+    
 
 class StepBlueprint(models.Model):
     """
@@ -180,8 +196,65 @@ class Flow(Step):
 
     type  = models.CharField( max_length=1, choices=TYPES )
 
+    def check_child_states(self):
+        """
+        This checks all the children of the flow and, depending on their state, sets the state
+        of the flow itself.  If they're all complete, for example, the flow is marked as complete.
+
+        Current rules:
+        
+        1.  If any child is 'running' or 'pending' the parent is running
+        2.  If no children are being executed, and any children are in failed state, the parent has failed
+        3.  If no children are being executed, and any children have been killed, the parent is killed
+        4.  If all children have completed, 
+        """
+        child_count = 0
+        children_executing = 0
+        children_complete = 0
+        children_killed = 0
+        children_unrun = 0
+        children_failed = 0
+        new_state = None
+        
+        for child in self.get_children():
+            child_count += 1
+            
+            # any child in a running state means this remains in a running state
+            if child.is_executing():
+                children_executing += 1
+                break
+            elif child.state == 'c':
+                children_complete += 1
+            elif child.state == 'f':
+                children_failed += 1
+            elif child.state == 'k':
+                children_killed += 1
+            elif child.state == 'u':
+                children_unrun += 1
+    
+        if children_executing > 0:
+            new_state = 'r'
+        elif child_count == children_complete:
+            new_state = 'c'
+        else:
+            if children_unrun == 0:
+                if children_killed > 0:
+                    new_state = 'k'
+                if children_failed > 0:
+                    new_state = 'f'
+            
+        ## only save a new state when we need to
+        if new_state is not None and new_state != self.state:
+            self.state = new_state
+            self.save()
+
+        ## if completed, report to parent
+        if new_state == 'c' and self.parent is not None:
+            self.parent.flow.child_child_states()
+
     def get_children(self):
         # Get a list of all the attrs relating to Child models.
+        # http://musings.tinbrain.net/blog/2013/jun/24/django-and-model-inheritance/
         child_attrs = dict(
             (rel.var_name, rel.get_cache_name())
             for rel in Step._meta.get_all_related_objects()
@@ -203,18 +276,21 @@ class Flow(Step):
         return command
     
     def run(self):
-      #print("DEBUG: run method processing children of a {0} called: ({1})".format(self.__class__.__name__, self.name) )
-      for child in self.get_children():
-          ## if this is a flow, run it
-          if isinstance(child, Flow):
-              child.run()
 
-          ## else if it's a command, execute it
-          elif isinstance(child, Command):
-              child.run()
+        self.state = 'r'
+        self.save()
+        
+        for child in self.get_children():
+            ## if this is a flow, run it
+            if isinstance(child, Flow):
+                child.run()
 
-          elif hasattr(child, 'name'):
-              raise Exception("ERROR: Encountered something other than a Flow or Command when processing a Flow's children")
+            ## else if it's a command, execute it
+            elif isinstance(child, Command):
+                child.run()
+
+            elif hasattr(child, 'name'):
+                raise Exception("ERROR: Encountered something other than a Flow or Command when processing a Flow's children")
 
               
 
@@ -284,7 +360,7 @@ class Command(Step):
     
     def run(self):
         self.exec_string = self.build_exec_string()
-        self.save()
+        self.state = 'r'
 
         ## TODO: this needs to be abstracted out to execution environments.  Testing like
         #   this for now.

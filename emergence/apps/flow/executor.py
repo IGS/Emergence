@@ -1,5 +1,10 @@
 from __future__ import absolute_import
 
+"""
+Note to prevent you from shoving your laptop across the table in frustration:  If you
+change this in any way, you have to restart your Celery worker  - Jorvis
+"""
+
 import os
 import sys
 import subprocess
@@ -19,7 +24,20 @@ def run( cmd ):
     ## LOTS more to do here.  Let's just get things running first
     #   http://sharats.me/the-ever-useful-and-neat-subprocess-module.html
     #   http://docs.python.org/3.3/library/subprocess.html
-    subprocess.call(cmd.exec_string, shell=True)
+
+    # subprocess waits for the call to end
+    returncode = subprocess.call(cmd.exec_string, shell=True)
+
+    if returncode == 0:
+        cmd.state = 'c'
+    else:
+        cmd.state = 'f'
+
+    cmd.save()
+        
+    ## phone home to the parent flow that the task is finished
+    if cmd.parent is not None:
+        cmd.parent.flow.check_child_states()
 
 
 

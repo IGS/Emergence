@@ -6,16 +6,17 @@ This is an example script that uses the Emergence API to do the following:
 1. Upload a genomic sample file (E. coli)
 2. Configure and run Prodigal
 3. Check execution status until complete
-4. Download output file
+4. Show output file path
 
 Notes:
-Fixtures can be dumped via: python3 manage.py dumpdata --indent=2 -e auth.permission
+This test execution takes about 6 seconds locally on my laptop.
 
 Author: Joshua Orvis (jorvis@gmail.com)
 """
 
 import os
 import sys
+from time import sleep
 
 ## having this means the user doesn't have to modify their ENV
 bin_dir = os.path.abspath(os.path.dirname(__file__))
@@ -24,6 +25,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "emergence.settings.dev")
 
 from emergence.apps.fileserver.models import LocalFile
 from emergence.apps.biotools.models import StandaloneTool
+from emergence.apps.flow.models import Flow
 
 example_dir = os.path.join(bin_dir, '..', 'emergence', 'data', 'examples')
 SAMPLE_GENOME = os.path.join(example_dir, 'Escherichia_coli_K12_DH10B', \
@@ -44,17 +46,24 @@ def main():
     #  parent flow is returned.  This will almost never pass an is_ready() check since
     #  no required parameters have been set yet.
     flow = prodigal.new_flow()
+    flow.save()
 
     command = flow.get_command(name='Run prodigal')
     command.set_param(name='-i', val=genome_file.path)
     command.set_param(name='-o', val='/tmp/prodigal.test.out' )
     command.set_param(name='-g', val='10' )
 
+    print("Initial flow state is: {0}".format(flow.state) )
     flow.run()
     
+    while flow.is_executing():
+        flow = Flow.objects.get(id=flow.id)
+        print("Gene prediction state is: {0}".format(flow.get_state_display()) )
+        sleep(1)
+        
+    
 
-
-
+    
 
 
 if __name__ == '__main__':
