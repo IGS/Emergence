@@ -26,7 +26,7 @@ class Command(BaseCommand):
         settings = configparser.ConfigParser()
         settings.read( os.path.join( os.path.abspath(os.path.dirname(__file__)), '../../settings.ini') )
 
-        tool_settings = settings[ "{0} {1}".format(tool_name, tool_version) ]
+        tool_settings = settings[ "{0} {1}".format('MUMmer', tool_version) ]
 
         flow_bp = FlowBlueprint( type='s' )
         flow_bp.save()
