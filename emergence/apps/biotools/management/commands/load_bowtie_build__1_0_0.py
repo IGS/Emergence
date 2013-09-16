@@ -1,6 +1,6 @@
 
 ## This should not be run directly.  Instead, run as a command through manage.py like:
-#   python3 manage.py biotools load_bowtie__1_0_0
+#   python3 manage.py biotools load_bowtie_build__1_0_0
 #
 
 
@@ -26,7 +26,7 @@ class Command(BaseCommand):
         settings = configparser.ConfigParser()
         settings.read( os.path.join( os.path.abspath(os.path.dirname(__file__)), '../../settings.ini') )
 
-        tool_settings = settings[ "{0} {1}".format(tool_name, tool_version) ]
+        tool_settings = settings[ "{0} {1}".format('Bowtie', tool_version) ]
 
         flow_bp = FlowBlueprint( type='s', \
                                  description='Bowtie is an ultrafast, memory-efficient short read aligner. It aligns short DNA sequences (reads) to the human genome at a rate of over 25 million 35-bp reads per hour. Bowtie indexes the genome with a Burrows-Wheeler index to keep its memory footprint small: typically about 2.2 GB for the human genome (2.9 GB for paired-end).')
