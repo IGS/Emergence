@@ -384,7 +384,12 @@ class Command(Step):
         if wait is True:
             task.wait()
         
-    
+
+    def get_param(self, name=None):
+        param = CommandParam.objects.get(command=self, name=name)
+        return param
+        
+            
     def set_param(self, name, val):
         ## get the blueprint for the passed param name
         bp = CommandBlueprintParam.objects.get(command=self.blueprint, name=name)
