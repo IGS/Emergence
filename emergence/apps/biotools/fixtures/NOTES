@@ -1,0 +1,2 @@
+Fixtures can be dumped via: python3 manage.py dumpdata --indent=2 -e auth.permission
+
