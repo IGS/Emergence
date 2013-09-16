@@ -136,7 +136,7 @@ class FlowBlueprint(StepBlueprint):
         ('p', 'parallel'),
     )
 
-    type  = models.CharField( max_length=1, choices=TYPES )
+    type  = models.CharField( max_length=1, choices=TYPES, default='s' )
 
 
     def build(self):
@@ -194,7 +194,7 @@ class Flow(Step):
         ('p', 'parallel'),
     )
 
-    type  = models.CharField( max_length=1, choices=TYPES )
+    type  = models.CharField( max_length=1, choices=TYPES, default='s' )
 
     def check_child_states(self):
         """
@@ -275,22 +275,29 @@ class Flow(Step):
         command = Command.objects.get(parent=self, name=name)
         return command
     
-    def run(self):
+    def run(self, wait=None):
 
         self.state = 'r'
         self.save()
-        
+
+        if wait is None:
+            wait = True
+
         for child in self.get_children():
-            ## if this is a flow, run it
-            if isinstance(child, Flow):
-                child.run()
-
-            ## else if it's a command, execute it
-            elif isinstance(child, Command):
-                child.run()
-
-            elif hasattr(child, 'name'):
+            # don't re-run anything that's already complete
+            if child.state == 'c':
+                continue
+            
+            # sanity check, for now
+            if not isinstance(child, Flow) and not isinstance(child, Command):
                 raise Exception("ERROR: Encountered something other than a Flow or Command when processing a Flow's children")
+
+            if self.type == 's':
+                child.run(wait=True)
+            else:
+                # must be parallel
+                child.run(wait=False)
+                raise Exception("ERROR: parallel flows not currently handled")
 
               
 
@@ -358,15 +365,24 @@ class Command(Step):
         else:
             return True
     
-    def run(self):
+    def run(self, wait=None):
         self.exec_string = self.build_exec_string()
         self.state = 'r'
 
+        if wait is None:
+            # this is a safer default
+            wait = True
+
         ## TODO: this needs to be abstracted out to execution environments.  Testing like
         #   this for now.
+        # http://docs.celeryproject.org/en/latest/userguide/calling.html#guide-calling
+        # generate task id myself? request_id=str(uuid.uuid4()).replace('-','')
         task = run.delay( self )
         self.task_id = task.id
         self.save()
+
+        if wait is True:
+            task.wait()
         
     
     def set_param(self, name, val):

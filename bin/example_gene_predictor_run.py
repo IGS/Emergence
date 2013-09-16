@@ -53,7 +53,6 @@ def main():
     command.set_param(name='-o', val='/tmp/prodigal.test.out' )
     command.set_param(name='-g', val='10' )
 
-    print("Initial flow state is: {0}".format(flow.state) )
     flow.run()
     
     while flow.is_executing():

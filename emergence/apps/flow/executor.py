@@ -18,7 +18,7 @@ from flow.celery import celery
 
 
 @celery.task
-def run( cmd ):
+def run( cmd, wait=None ):
     print("Running: {0}".format(cmd.exec_string) )
 
     ## LOTS more to do here.  Let's just get things running first
@@ -26,6 +26,7 @@ def run( cmd ):
     #   http://docs.python.org/3.3/library/subprocess.html
 
     # subprocess waits for the call to end
+    # TODO: need to set the cwd argument here
     returncode = subprocess.call(cmd.exec_string, shell=True)
 
     if returncode == 0:
